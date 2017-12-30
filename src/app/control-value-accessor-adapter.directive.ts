@@ -11,11 +11,11 @@ export const CONTROL_VALUE_ACCESSOR_ADAPTER: any = {
 
 @Directive({
   selector: '[controlValueAccessorAdapter]',
-  providers: [CONTROL_VALUE_ACCESSOR_ADAPTER]
+  providers: [CONTROL_VALUE_ACCESSOR_ADAPTER,PreUnderscoreControlValueAccessor, PostDotControlValueAccessor]
 })
 export class ControlValueAccessorAdapter implements ControlValueAccessor {
 
-  constructor(private renderer: Renderer2, private element: ElementRef) {
+  constructor(private renderer: Renderer2, private element: ElementRef, private preUnderscore: PreUnderscoreControlValueAccessor, private postDot: PostDotControlValueAccessor) {
     this.postDot.registerOnChange((modelFromCVA2: number) => {
       this.currentModelOfCVA2 = modelFromCVA2;
     });
@@ -23,9 +23,6 @@ export class ControlValueAccessorAdapter implements ControlValueAccessor {
       this.currentModelOfCVA1 = modelFromCVA1;
     });
   }
-
-  private preUnderscore: PreUnderscoreControlValueAccessor = new PreUnderscoreControlValueAccessor(this.renderer, this.element);
-  private postDot: PostDotControlValueAccessor = new PostDotControlValueAccessor(this.renderer, this.element);
   private currentModelOfCVA2 = null;
   private currentModelOfCVA1 = null;
 
