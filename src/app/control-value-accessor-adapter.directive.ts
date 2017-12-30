@@ -16,11 +16,18 @@ export const CONTROL_VALUE_ACCESSOR_ADAPTER: any = {
 export class ControlValueAccessorAdapter implements ControlValueAccessor {
 
   constructor(private renderer: Renderer2, private element: ElementRef) {
-
+    this.postDot.registerOnChange((modelFromCVA2: number) => {
+      this.currentModelOfCVA2 = modelFromCVA2;
+    });
+    this.preUnderscore.registerOnChange((modelFromCVA1: string) => {
+      this.currentModelOfCVA1 = modelFromCVA1;
+    });
   }
 
   private preUnderscore: PreUnderscoreControlValueAccessor = new PreUnderscoreControlValueAccessor(this.renderer, this.element);
   private postDot: PostDotControlValueAccessor = new PostDotControlValueAccessor(this.renderer, this.element);
+  private currentModelOfCVA2 = null;
+  private currentModelOfCVA1 = null;
 
   /**
    *
@@ -34,19 +41,22 @@ export class ControlValueAccessorAdapter implements ControlValueAccessor {
 
     let viewValueAfterCVA1 = this.element.nativeElement.value;
 
-    // TODO: parse from view to model for CVA2
-
-    /**
-     * CVA2
-     */
-    this.postDot.writeValue(viewValueAfterCVA1);
   }
 
-  @HostListener('input', ['$event']) onInput($event) {
-    console.log('on input adapter', $event);
-    let viewValue = this.element.nativeElement.value;
-    let modelValue = viewValue;
-    this.propagateChange(modelValue);
+  @HostListener('input', ['$event.target.value']) onInput(viewValue) {
+    /**
+     * CVA 2
+     */
+    console.log('on input adapter', viewValue);
+
+    // create expected viewValue for CVA2
+    //viewValue = viewValue.replace('_', '');
+    this.preUnderscore.onInput(viewValue);// call this to get modelValue of cva1
+    // TODO: you may have to format modelValue to an expected viewValue, but that shouldnt be a problem
+
+    this.postDot.onInput(this.currentModelOfCVA1);// triggers modelChangeFromCVA2
+    // propagate cva2model to angular
+    this.propagateChange(this.currentModelOfCVA2);
   }
 
   public propagateChange = (_) => {
