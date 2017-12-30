@@ -28,9 +28,9 @@ export class PreUnderscoreControlValueAccessor implements ControlValueAccessor {
     //this.renderer.setProperty(this.element, 'value', value);
   }
 
-  @HostListener('input',['$event']) onInput($event) {
-    console.log('on input', $event);
-    let viewValue = this.element.nativeElement.value;
+  @HostListener('input',['$event.target.value']) onInput(viewValue) {
+    console.log('on input', viewValue);
+    //let viewValue = this.element.nativeElement.value;
     let modelValue = this.parse(viewValue);
     this.propagateChange (modelValue);
   }

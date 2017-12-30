@@ -27,9 +27,10 @@ export class PostDotControlValueAccessor implements ControlValueAccessor {
     this.element.nativeElement.value = viewValue;
   }
 
-  @HostListener('input',['$event']) onInput($event) {
-    console.log('on input post dot', $event);
-    let viewValue = this.element.nativeElement.value;
+  @HostListener('input',['$event.target.value']) onInput(viewValue) {
+    console.log('on input post dot', viewValue);
+    //let viewValue = this.element.nativeElement.value;
+
     let modelValue = this.parse(viewValue);
     this.propagateChange (modelValue);
   }
