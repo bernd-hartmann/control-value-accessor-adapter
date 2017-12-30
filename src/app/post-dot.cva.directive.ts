@@ -47,16 +47,15 @@ export class PostDotControlValueAccessor implements ControlValueAccessor {
     this.onTouched = fn;
   }
 
-  private parse(viewValue:string):string{
+  private parse(viewValue:string):number{
+    let viewValueNumber = parseInt(viewValue);
     // convert here
-    // remove dot
-    let modelValue = viewValue.replace('.','');
+    let modelValue = viewValueNumber+0.99;
     return modelValue;
   }
 
-  private toViewFormat(modelValue:string):string{
-    // convert here
-    return modelValue+'.';
+  private toViewFormat(modelValue:number):string{
+    return (modelValue - 0.99)+'';
   }
 
 }

@@ -1,5 +1,7 @@
 import {Directive, ElementRef, HostListener, forwardRef, Renderer2} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {PreUnderscoreControlValueAccessor} from './pre-underscore.cva.directive';
+import {PostDotControlValueAccessor} from './post-dot.cva.directive';
 
 export const CONTROL_VALUE_ACCESSOR_ADAPTER: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -17,20 +19,33 @@ export class ControlValueAccessorAdapter implements ControlValueAccessor {
 
   }
 
+  private preUnderscore: PreUnderscoreControlValueAccessor = new PreUnderscoreControlValueAccessor(this.renderer, this.element);
+  private postDot: PostDotControlValueAccessor = new PostDotControlValueAccessor(this.renderer, this.element);
+
   /**
    *
    * write model value to view, angular calls this
    */
   writeValue(modelValue: any) {
-    console.log('writeValue to view adapter', modelValue);
-    let viewValue = this.toViewFormat(modelValue);
-    this.element.nativeElement.value = viewValue;
+    /**
+     * CVA1
+     */
+    this.preUnderscore.writeValue(modelValue);
+
+    let viewValueAfterCVA1 = this.element.nativeElement.value;
+
+    // TODO: parse from view to model for CVA2
+
+    /**
+     * CVA2
+     */
+    this.postDot.writeValue(viewValueAfterCVA1);
   }
 
   @HostListener('input', ['$event']) onInput($event) {
     console.log('on input adapter', $event);
     let viewValue = this.element.nativeElement.value;
-    let modelValue = this.parse(viewValue);
+    let modelValue = viewValue;
     this.propagateChange(modelValue);
   }
 
@@ -45,15 +60,6 @@ export class ControlValueAccessorAdapter implements ControlValueAccessor {
 
   registerOnTouched(fn): void {
     this.onTouched = fn;
-  }
-
-  private parse(viewValue: string): string {
-    return viewValue;
-  }
-
-  private toViewFormat(modelValue: string): string {
-    // convert here
-    return modelValue;
   }
 
 }
