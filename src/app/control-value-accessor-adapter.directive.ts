@@ -11,7 +11,7 @@ export const CONTROL_VALUE_ACCESSOR_ADAPTER: any = {
 
 @Directive({
   selector: '[controlValueAccessorAdapter]',
-  providers: [CONTROL_VALUE_ACCESSOR_ADAPTER,PreUnderscoreControlValueAccessor, PostDotControlValueAccessor]
+  providers: [CONTROL_VALUE_ACCESSOR_ADAPTER, PreUnderscoreControlValueAccessor, PostDotControlValueAccessor]
 })
 export class ControlValueAccessorAdapter implements ControlValueAccessor {
 
@@ -23,6 +23,7 @@ export class ControlValueAccessorAdapter implements ControlValueAccessor {
       this.currentModelOfCVA1 = modelFromCVA1;
     });
   }
+
   private currentModelOfCVA2 = null;
   private currentModelOfCVA1 = null;
 
@@ -49,7 +50,8 @@ export class ControlValueAccessorAdapter implements ControlValueAccessor {
     // create expected viewValue for CVA2
     //viewValue = viewValue.replace('_', '');
     this.preUnderscore.onInput(viewValue);// call this to get modelValue of cva1
-    // TODO: you may have to format modelValue to an expected viewValue, but that shouldnt be a problem
+    // TODO: you may have to convert modelValue of cva1 to an expected viewValue for cva1,
+    // TODO: but that shouldnt be a problem
 
     this.postDot.onInput(this.currentModelOfCVA1);// triggers modelChangeFromCVA2
     // propagate cva2model to angular
@@ -67,6 +69,24 @@ export class ControlValueAccessorAdapter implements ControlValueAccessor {
 
   registerOnTouched(fn): void {
     this.onTouched = fn;
+  }
+
+  /**
+   * not sure if this is needed
+   * @param {number} cva2Model
+   * @returns {string}
+   */
+  private convertCva2ModelToCva1ViewValue(cva2Model: number): string {
+    return cva2Model + '';
+  }
+
+  /**
+   * needed
+   * @param cva1ModelValue
+   * @returns {string}
+   */
+  private convertCva1ModelValueToCva2ViewValue(cva1ModelValue: any): string {
+    return cva1ModelValue;
   }
 
 }
