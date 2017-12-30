@@ -5,6 +5,7 @@ import {NgModule} from '@angular/core';
 import {AppComponent} from './app.component';
 import {FormsModule} from '@angular/forms';
 import {PreUnderscoreControlValueAccessor} from './pre-underscore.cva.directive';
+import {PostDotControlValueAccessor} from './post-dot.cva.directive';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import {PreUnderscoreControlValueAccessor} from './pre-underscore.cva.directive'
   ],
   declarations: [
     AppComponent,
-    PreUnderscoreControlValueAccessor
+    PreUnderscoreControlValueAccessor,
+    PostDotControlValueAccessor
   ],
   providers: [],
   bootstrap: [AppComponent]
