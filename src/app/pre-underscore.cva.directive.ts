@@ -1,7 +1,7 @@
 import {Directive, ElementRef, HostListener, forwardRef, Renderer2} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 
-export const DATE_VALUE_ACCESSOR: any = {
+export const PRE_UNDERSCORE_CONTROL_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
   useExisting: forwardRef(() => PreUnderscoreControlValueAccessor),
   multi: true
@@ -9,7 +9,7 @@ export const DATE_VALUE_ACCESSOR: any = {
 
 @Directive({
   selector: '[preUnderscore]',
-  providers: [DATE_VALUE_ACCESSOR]
+  providers: [PRE_UNDERSCORE_CONTROL_VALUE_ACCESSOR]
 })
 export class PreUnderscoreControlValueAccessor implements ControlValueAccessor {
 
